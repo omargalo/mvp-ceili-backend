@@ -32,7 +32,17 @@ namespace CeiliApi.Controllers
             var alumnos = await _db.Alumnos
                 .Where(a => a.DocenteId == docenteId)
                 .ToListAsync();
-            return Ok(alumnos);
+
+            // Mapeo entidades → DTOs
+            var dtos = alumnos.Select(a => new AlumnoDto
+            {
+                Id = a.Id,
+                NombreCompleto = a.NombreCompleto,
+                Edad = a.Edad,
+                Sexo = a.Sexo
+            }).ToList();
+
+            return Ok(dtos);
         }
 
         [HttpPost]
@@ -48,7 +58,13 @@ namespace CeiliApi.Controllers
             };
             _db.Alumnos.Add(alumno);
             await _db.SaveChangesAsync();
-            return Ok(alumno);
+            return Ok(new AlumnoDto
+            {
+                Id = alumno.Id,
+                NombreCompleto = alumno.NombreCompleto,
+                Edad = alumno.Edad,
+                Sexo = alumno.Sexo
+            });
         }
 
         [HttpPut("{id}")]
@@ -62,7 +78,13 @@ namespace CeiliApi.Controllers
             alumno.Edad = dto.Edad;
             alumno.Sexo = dto.Sexo;
             await _db.SaveChangesAsync();
-            return Ok(alumno);
+            return Ok(new AlumnoDto
+            {
+                Id = alumno.Id,
+                NombreCompleto = alumno.NombreCompleto,
+                Edad = alumno.Edad,
+                Sexo = alumno.Sexo
+            }); ;
         }
 
         [HttpDelete("{id}")]

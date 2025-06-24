@@ -5,11 +5,11 @@ namespace CeiliApi.Models.DTOs
 {
     public class EvaluacionDto
     {
-        public string Alumno { get; set; } = "";
-        public string Grupo { get; set; } = "";
         public DateTime Fecha { get; set; }
         public List<AspectoEvaluadoDto> Aspectos { get; set; } = new();
         public string ObservacionDocente { get; set; } = "";
+        public int AlumnoId { get; set; }
+        public int DocenteId { get; set; }
     }
 
     public class AspectoEvaluadoDto
