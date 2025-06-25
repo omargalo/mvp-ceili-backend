@@ -41,16 +41,18 @@ namespace CeiliApi.Controllers
             var dtos = evaluaciones.Select(e => new EvaluacionResumenDto
             {
                 Id = e.Id,
+                AlumnoId = e.Alumno.Id, // <-- este campo es clave para filtrar en el frontend
                 AlumnoNombre = e.Alumno.NombreCompleto,
                 Fecha = e.Fecha,
                 ObservacionDocente = e.ObservacionDocente,
                 Aspectos = string.IsNullOrEmpty(e.AspectosJson)
-            ? new List<AspectoEvaluadoDto>()
-            : JsonSerializer.Deserialize<List<AspectoEvaluadoDto>>(e.AspectosJson) ?? new List<AspectoEvaluadoDto>()
+                    ? new List<AspectoEvaluadoDto>()
+                    : JsonSerializer.Deserialize<List<AspectoEvaluadoDto>>(e.AspectosJson) ?? new List<AspectoEvaluadoDto>()
             }).ToList();
 
             return Ok(dtos);
         }
+
 
         [HttpPost]
         public async Task<IActionResult> CrearEvaluacion([FromBody] EvaluacionDto dto)
