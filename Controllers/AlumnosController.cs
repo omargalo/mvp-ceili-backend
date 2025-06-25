@@ -45,6 +45,27 @@ namespace CeiliApi.Controllers
             return Ok(dtos);
         }
 
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetAlumnoPorId(int id)
+        {
+            var docenteId = GetDocenteId();
+            var alumno = await _db.Alumnos
+                .Where(a => a.DocenteId == docenteId && a.Id == id)
+                .FirstOrDefaultAsync();
+
+            if (alumno == null)
+                return NotFound();
+
+            // Mapea a DTO si prefieres, aquí directo:
+            return Ok(new AlumnoDto
+            {
+                Id = alumno.Id,
+                NombreCompleto = alumno.NombreCompleto,
+                Edad = alumno.Edad,
+                Sexo = alumno.Sexo
+            });
+        }
+
         [HttpPost]
         public async Task<IActionResult> CrearAlumno([FromBody] CrearAlumnoDto dto)
         {

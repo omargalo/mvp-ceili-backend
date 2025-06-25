@@ -15,6 +15,6 @@ namespace CeiliApi.Models.DTOs
     public class AspectoEvaluadoDto
     {
         public string Nombre { get; set; } = "";
-        public string Riesgo { get; set; } = ""; // "Bajo", "Medio", "Alto"
+        public string Riesgo { get; set; } = "";
     }
 }
