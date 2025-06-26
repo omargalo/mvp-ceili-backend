@@ -10,6 +10,7 @@ namespace CeiliApi.Data
         public DbSet<Docente> Docentes { get; set; }
         public DbSet<Alumno> Alumnos { get; set; }
         public DbSet<Evaluacion> Evaluaciones { get; set; }
+        public DbSet<RetroalimentacionIA> Retroalimentaciones { get; set; } = null!;
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -24,6 +25,13 @@ namespace CeiliApi.Data
                 .WithMany(d => d.Evaluaciones)
                 .HasForeignKey(e => e.DocenteId)
                 .OnDelete(DeleteBehavior.Restrict);
+
+            // Relación uno a uno Evaluacion <-> RetroalimentacionIA
+            modelBuilder.Entity<Evaluacion>()
+                .HasOne(e => e.Retroalimentacion)
+                .WithOne(r => r.Evaluacion)
+                .HasForeignKey<RetroalimentacionIA>(r => r.EvaluacionId)
+                .OnDelete(DeleteBehavior.Cascade); // Borra la retro si se borra la evaluación
 
             base.OnModelCreating(modelBuilder);
         }

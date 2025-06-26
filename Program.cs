@@ -26,6 +26,9 @@ var endpoint = new Uri(azureAiConfig["Endpoint"]!);
 var apiKey = azureAiConfig["ApiKey"]!;
 builder.Services.AddSingleton(new ChatCompletionsClient(endpoint, new AzureKeyCredential(apiKey), new AzureAIInferenceClientOptions()));
 
+// Servicios personalizados
+builder.Services.AddScoped<ChatGptService>();
+
 // CORS
 builder.Services.AddCors(options =>
 {

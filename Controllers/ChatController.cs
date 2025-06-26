@@ -1,6 +1,4 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Azure.AI.Inference;
-using Microsoft.Extensions.Configuration;
 using System.Threading.Tasks;
 using System;
 
@@ -8,30 +6,20 @@ using System;
 [Route("api/[controller]")]
 public class ChatController : ControllerBase
 {
-    private readonly ChatCompletionsClient _client;
-    private readonly IConfiguration _config;
+    private readonly ChatGptService _chatService;
 
-    public ChatController(ChatCompletionsClient client, IConfiguration config)
+    public ChatController(ChatGptService chatService)
     {
-        _client = client;
-        _config = config;
+        _chatService = chatService;
     }
 
     [HttpPost]
     public async Task<IActionResult> Post([FromBody] string userMessage)
     {
-        var options = new ChatCompletionsOptions
-        {
-            MaxTokens = 256,
-            Temperature = 0.7f,
-            Model = _config["AzureAI:Model"] ?? "gpt-4o-mini"
-        };
-        options.Messages.Add(new ChatRequestUserMessage(userMessage));
-
         try
         {
-            var response = await _client.CompleteAsync(options);
-            return Ok(response.Value.Content);
+            var response = await _chatService.GetChatResponseAsync(userMessage);
+            return Ok(response);
         }
         catch (Exception ex)
         {

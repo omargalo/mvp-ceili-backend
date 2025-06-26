@@ -12,6 +12,8 @@ namespace CeiliApi.Models.Entities
         public DateTime Fecha { get; set; }
         public string AspectosJson { get; set; } = "";
         public string ObservacionDocente { get; set; } = "";
+        public RetroalimentacionIA? Retroalimentacion { get; set; }
+
     }
 
 }
