@@ -4,11 +4,8 @@ using CeiliApi.Models.Entities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using System.Collections.Generic;
-using System.Linq;
 using System;
 using System.Threading.Tasks;
-using Newtonsoft.Json;
 
 namespace CeiliApi.Controllers
 {
@@ -88,43 +85,8 @@ namespace CeiliApi.Controllers
             if (existente != null)
                 return Conflict("Ya existe retroalimentación IA para esta evaluación.");
 
-            // (2) Construye el resumen por categoría y detecta el riesgo global
-            var aspectos = JsonConvert.DeserializeObject<List<AspectoEvaluadoDto>>(evaluacion.AspectosJson ?? "[]") ?? new List<AspectoEvaluadoDto>();
-            var resumen = aspectos
-                .GroupBy(a => a.Categoria)
-                .Select(g => $"{g.Key}: {ObtenRiesgoCategoria(g)}")
-                .ToList();
-
-            // Determina el riesgo global
-            string nivelGlobal = ObtenerRiesgoGlobal(aspectos);
-
-            // (3) Prompt dinámico según el riesgo global
-            string instrucciones;
-            if (nivelGlobal == "Bajo")
-            {
-                instrucciones = @"
-- El alumno no presenta riesgos significativos.
-- Escribe un mensaje breve y motivador dirigido al docente (máximo dos párrafos), reconociendo el buen trabajo realizado, y si acaso, una sugerencia de mejora general.";
-            }
-            else
-            {
-                instrucciones = @"
-- El alumno presenta áreas de mejora.
-- Da sugerencias claras en párrafos breves o una lista corta (máximo 5 puntos), según lo creas más útil.
-- No repitas introducción, ve al grano y sé concreto, profesional y empático.";
-            }
-
-            string prompt = $@"
-Eres un orientador escolar experto. Analiza el siguiente resumen de riesgos:
-{string.Join("\n", resumen)}
-Observaciones del docente: '{evaluacion.ObservacionDocente}'
-
-INSTRUCCIONES:
-{instrucciones}
-";
-
-            // (4) Llama a OpenAI
-            var gptRespuesta = await _chatService.GetChatResponseAsync(prompt);
+            // Lógica va al servicio
+            var gptRespuesta = await _chatService.GenerarRetroalimentacionIAAsync(evaluacion);
 
             var retro = new RetroalimentacionIA
             {
@@ -147,32 +109,6 @@ INSTRUCCIONES:
             };
 
             return Ok(dto);
-
-            // Helper para obtener el riesgo predominante por categoría
-            string ObtenRiesgoCategoria(IGrouping<string, AspectoEvaluadoDto> grupo)
-            {
-                var cuenta = grupo.GroupBy(a => a.Riesgo)
-                    .ToDictionary(g => g.Key, g => g.Count());
-                if (cuenta.TryGetValue("Alto", out int alto) && alto > 0) return "Alto";
-                if (cuenta.TryGetValue("Medio", out int medio) && medio > 0) return "Medio";
-                return "Bajo";
-            }
-
-            // Helper para determinar el riesgo global (usa lógica similar a tu frontend)
-            string ObtenerRiesgoGlobal(List<AspectoEvaluadoDto> aspectos)
-            {
-                int bajo = 0, medio = 0, alto = 0;
-                foreach (var g in aspectos.GroupBy(a => a.Categoria))
-                {
-                    var cuenta = g.GroupBy(a => a.Riesgo).ToDictionary(x => x.Key, x => x.Count());
-                    if (cuenta.TryGetValue("Alto", out int nAlto)) alto += nAlto;
-                    if (cuenta.TryGetValue("Medio", out int nMedio)) medio += nMedio;
-                    if (cuenta.TryGetValue("Bajo", out int nBajo)) bajo += nBajo;
-                }
-                if (alto >= medio && alto >= bajo && alto > 0) return "Alto";
-                if (medio >= bajo && medio > 0) return "Medio";
-                return "Bajo";
-            }
         }
     }
 }
