@@ -1,6 +1,8 @@
 using Azure;
 using Azure.AI.Inference;
 using CeiliApi.Data;
+using CeiliApi.Services;
+using CeiliApi.Business;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.EntityFrameworkCore;
@@ -26,6 +28,8 @@ builder.Services.AddSingleton(new ChatCompletionsClient(endpoint, new AzureKeyCr
 
 // Servicios personalizados
 builder.Services.AddScoped<ChatGptService>();
+builder.Services.AddScoped<PasswordResetService>();
+builder.Services.AddScoped<PasswordReset>();
 
 // CORS
 builder.Services.AddCors(options =>

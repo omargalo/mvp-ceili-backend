@@ -11,6 +11,7 @@ namespace CeiliApi.Data
         public DbSet<Alumno> Alumnos { get; set; }
         public DbSet<Evaluacion> Evaluaciones { get; set; }
         public DbSet<RetroalimentacionIA> Retroalimentaciones { get; set; } = null!;
+        public DbSet<PasswordResetToken> PasswordResetTokens { get; set; } = null!;
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -31,7 +32,13 @@ namespace CeiliApi.Data
                 .HasOne(e => e.Retroalimentacion)
                 .WithOne(r => r.Evaluacion)
                 .HasForeignKey<RetroalimentacionIA>(r => r.EvaluacionId)
-                .OnDelete(DeleteBehavior.Cascade); // Borra la retro si se borra la evaluación
+                .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<PasswordResetToken>()
+                .HasOne(t => t.Docente)
+                .WithMany()
+                .HasForeignKey(t => t.DocenteId)
+                .OnDelete(DeleteBehavior.Cascade);
 
             base.OnModelCreating(modelBuilder);
         }
