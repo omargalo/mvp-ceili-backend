@@ -15,9 +15,9 @@ namespace CeiliApi.Controllers
     [Route("api/[controller]")]
     public class AlumnosController : ControllerBase
     {
-        private readonly CeiliDbContext _db;
+        private readonly ApiDbContext _db;
 
-        public AlumnosController(CeiliDbContext db)
+        public AlumnosController(ApiDbContext db)
         {
             _db = db;
         }

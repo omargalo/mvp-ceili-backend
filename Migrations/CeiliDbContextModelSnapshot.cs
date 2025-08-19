@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace CeiliApi.Migrations
 {
-    [DbContext(typeof(CeiliDbContext))]
+    [DbContext(typeof(ApiDbContext))]
     partial class CeiliDbContextModelSnapshot : ModelSnapshot
     {
         protected override void BuildModel(ModelBuilder modelBuilder)

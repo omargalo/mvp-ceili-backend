@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CeiliApi.Migrations
 {
     [DbContext(typeof(ApiDbContext))]
-    [Migration("20250626164202_AddRetroalimentacionIA")]
-    partial class AddRetroalimentacionIA
+    [Migration("20250819173623_RenameDbContext")]
+    partial class RenameDbContext
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -121,6 +121,34 @@ namespace CeiliApi.Migrations
                     b.ToTable("Evaluaciones");
                 });
 
+            modelBuilder.Entity("CeiliApi.Models.Entities.PasswordResetToken", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("DocenteId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("FechaExpiracion")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Token")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("Usado")
+                        .HasColumnType("bit");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("DocenteId");
+
+                    b.ToTable("PasswordResetTokens");
+                });
+
             modelBuilder.Entity("CeiliApi.Models.Entities.RetroalimentacionIA", b =>
                 {
                     b.Property<int>("Id")
@@ -176,6 +204,17 @@ namespace CeiliApi.Migrations
                         .IsRequired();
 
                     b.Navigation("Alumno");
+
+                    b.Navigation("Docente");
+                });
+
+            modelBuilder.Entity("CeiliApi.Models.Entities.PasswordResetToken", b =>
+                {
+                    b.HasOne("CeiliApi.Models.Entities.Docente", "Docente")
+                        .WithMany()
+                        .HasForeignKey("DocenteId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Docente");
                 });

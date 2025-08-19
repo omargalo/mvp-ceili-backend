@@ -14,10 +14,10 @@ namespace CeiliApi.Controllers
     [Route("api/[controller]")]
     public class RetroalimentacionIAController : ControllerBase
     {
-        private readonly CeiliDbContext _db;
+        private readonly ApiDbContext _db;
         private readonly ChatGptService _chatService;
 
-        public RetroalimentacionIAController(CeiliDbContext db, ChatGptService chatService)
+        public RetroalimentacionIAController(ApiDbContext db, ChatGptService chatService)
         {
             _db = db;
             _chatService = chatService;

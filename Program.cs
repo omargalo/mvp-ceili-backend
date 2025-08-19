@@ -16,7 +16,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Conexión a base de datos
 var connString = builder.Configuration.GetConnectionString("CeiliDb");
-builder.Services.AddDbContext<CeiliDbContext>(options =>
+builder.Services.AddDbContext<ApiDbContext>(options =>
     options.UseSqlServer(connString, sql => sql.EnableRetryOnFailure())
 );
 

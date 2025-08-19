@@ -18,9 +18,9 @@ namespace CeiliApi.Controllers
     [Route("api/[controller]")]
     public class EvaluacionesController : ControllerBase
     {
-        private readonly CeiliDbContext _db;
+        private readonly ApiDbContext _db;
 
-        public EvaluacionesController(CeiliDbContext db)
+        public EvaluacionesController(ApiDbContext db)
         {
             _db = db;
         }

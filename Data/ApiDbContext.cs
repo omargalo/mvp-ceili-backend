@@ -3,9 +3,9 @@ using Microsoft.EntityFrameworkCore;
 
 namespace CeiliApi.Data
 {
-    public class CeiliDbContext : DbContext
+    public class ApiDbContext : DbContext
     {
-        public CeiliDbContext(DbContextOptions<CeiliDbContext> options) : base(options) { }
+        public ApiDbContext(DbContextOptions<ApiDbContext> options) : base(options) { }
 
         public DbSet<Docente> Docentes { get; set; }
         public DbSet<Alumno> Alumnos { get; set; }

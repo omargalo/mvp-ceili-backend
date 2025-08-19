@@ -15,10 +15,10 @@ namespace CeiliApi.Controllers
     [Route("api/[controller]")]
     public class AuthController : ControllerBase
     {
-        private readonly CeiliDbContext _db;
+        private readonly ApiDbContext _db;
         private readonly IConfiguration _config;
 
-        public AuthController(CeiliDbContext db, IConfiguration config)
+        public AuthController(ApiDbContext db, IConfiguration config)
         {
             _db = db;
             _config = config;

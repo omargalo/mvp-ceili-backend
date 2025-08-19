@@ -11,9 +11,9 @@ namespace CeiliApi.Business
 {
     public class PasswordReset
     {
-        private readonly CeiliDbContext _db;
+        private readonly ApiDbContext _db;
 
-        public PasswordReset(CeiliDbContext db)
+        public PasswordReset(ApiDbContext db)
         {
             _db = db;
         }

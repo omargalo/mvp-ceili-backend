@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace CeiliApi.Migrations
 {
-    [DbContext(typeof(CeiliDbContext))]
+    [DbContext(typeof(ApiDbContext))]
     [Migration("20250701155547_AddPasswordResetToken")]
     partial class AddPasswordResetToken
     {
